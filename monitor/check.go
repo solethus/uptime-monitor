@@ -54,6 +54,13 @@ func check(ctx context.Context, site *site.Site) error {
 	if err != nil {
 		return err
 	}
+	// Publish a Pub/Sub message if site transitions
+	// from up->down or from down->up.
+	err = pushOnTransition(ctx, site, result.Up)
+	if err != nil {
+		return err
+	}
+
 	_, err = db.Exec(ctx, `
 		INSERT INTO checks (site_id, up, checked_at)
 		VALUES ($1, $2, NOW())
