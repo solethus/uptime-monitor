@@ -50,9 +50,9 @@ var secrets struct {
 var _ = pubsub.NewSubscription(monitor.TransitionTopic, "slack-notification", pubsub.SubscriptionConfig[*monitor.TransitionEvent]{
 	Handler: func(ctx context.Context, event *monitor.TransitionEvent) error {
 		// Compose your message.
-		msg := fmt.Sprint("*%s is down!*", event.Site.URL)
+		msg := fmt.Sprintf("*%s is down!*", event.Site.URL)
 		if event.Up {
-			msg = fmt.Sprint("*%s is up!*", event.Site.URL)
+			msg = fmt.Sprintf("*%s is up!*", event.Site.URL)
 		}
 		// Send the Slack notification.
 		return Notify(ctx, &NotifyParams{Text: msg})
